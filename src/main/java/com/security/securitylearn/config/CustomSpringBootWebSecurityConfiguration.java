@@ -1,14 +1,23 @@
 package com.security.securitylearn.config;
 
+import com.security.securitylearn.common.JsonLoginPostProcessor;
+import com.security.securitylearn.common.LoginPostProcessor;
+import com.security.securitylearn.filter.PreLoginFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.access.prepost.PreFilter;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import java.util.Collection;
 
 /**
  * @author qian
@@ -18,9 +27,26 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class CustomSpringBootWebSecurityConfiguration {
 
+    private static final String LOGIN_PROCESS_URL = "/process";
+
+    @Bean
+    public LoginPostProcessor jsonLoginPostProcessor() {
+        return new JsonLoginPostProcessor();
+    }
+
+    @Bean
+    public PreLoginFilter preLoginFilter(Collection<LoginPostProcessor> processors) {
+        return new PreLoginFilter(LOGIN_PROCESS_URL, processors);
+    }
+
+
     @Configuration
     @Order(SecurityProperties.BASIC_AUTH_ORDER)
     static class DefaultConfigurerAdapter extends WebSecurityConfigurerAdapter{
+
+        @Autowired
+        private PreLoginFilter preLoginFilter;
+
         @Override
         protected void configure(AuthenticationManagerBuilder auth) throws Exception {
             super.configure(auth);
@@ -39,6 +65,7 @@ public class CustomSpringBootWebSecurityConfiguration {
                     .authorizeRequests()
                     .anyRequest().authenticated()
                     .and()
+                    .addFilterBefore(preLoginFilter, UsernamePasswordAuthenticationFilter.class)
                     .formLogin()
                     .loginProcessingUrl("/process")
                     .successForwardUrl("/login/success")

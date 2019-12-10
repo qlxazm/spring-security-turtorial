@@ -12,3 +12,6 @@ UserDetailsServiceAutoConfiguration的全路径限定名是org.springframework.b
 InMemoryUserDetailsManager实例实现了UserDetailsManager接口，UserDetailsManager接口又是UserDetailsService接口的子接口。所以，如果我们在容器中提供一个UserDetailsManager接口的实现类，默认的InMemoryUserDetailsManager实例就不会起作用，这样我们就可以自定义用户管理逻辑。
 
 ## day2 自定义登录逻辑
+
+## day3 自定义可支持多种登陆方式
+
