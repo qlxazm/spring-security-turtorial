@@ -1,11 +1,11 @@
 package com.security.securitylearn.config;
 
+import com.security.securitylearn.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.provisioning.UserDetailsManager;
@@ -17,14 +17,16 @@ import org.springframework.security.provisioning.UserDetailsManager;
 @Configuration
 public class UserDetailsServiceConfiguration {
 
+    @Autowired
+    private SysUserService sysUserService;
+
     @Bean
     public UserDetailsRepository userDetailsRepository() {
-        UserDetailsRepository repository = new UserDetailsRepository();
+        UserDetailsRepository repository = new UserDetailsRepository(sysUserService);
 
-        // 这里创建了一个默认的用户。用户名为admin，密码为admin。其中密码加上前缀{noop}代表不加密密码，使用明文
+        // 这里创建了一个默认的用户。用户名为admin，密码为admin。
         // 一定要设置authorities，它代表用户所具有的权限
-        UserDetails defaultUser = User.withUsername("admin").password("{noop}admin").authorities(AuthorityUtils.NO_AUTHORITIES).build();
-        repository.createUser(defaultUser);
+//        repository.createUser();
         return repository;
     }
 
@@ -35,7 +37,7 @@ public class UserDetailsServiceConfiguration {
         return new UserDetailsManager() {
             @Override
             public void createUser(UserDetails userDetails) {
-                repository.createUser(userDetails);
+                repository.createUser();
             }
 
             @Override
