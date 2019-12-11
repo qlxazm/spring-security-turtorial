@@ -70,7 +70,7 @@ keytool是密码和证书的管理工具。它的位置位于\$JAVA_HOME\jre\bin
    keytool -list -keystore test.keystore
    ```
 
-   ![](E:\IDEAWorkSpace\security-learn\images\keytool查看密钥库中的证书.png)
+   ![](https://github.com/qlxazm/spring-security-turtorial/blob/day5/images/keytool查看密钥库中的证书.png)
 
 3. 导出公钥文件
 
