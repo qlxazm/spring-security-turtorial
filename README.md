@@ -37,11 +37,7 @@ keytool是密码和证书的管理工具。它的位置位于\$JAVA_HOME\jre\bin
    keytool -genkeypair -alias test -keyalg RSA -keystore test.keystore
    ```
 
-   
-
-   ![](E:\IDEAWorkSpace\security-learn\images\keytool生成证书.png)
-
-   
+   ![]([https://github.com/qlxazm/spring-security-turtorial/blob/day5/images/keytool%E7%94%9F%E6%88%90%E8%AF%81%E4%B9%A6.png](https://github.com/qlxazm/spring-security-turtorial/blob/day5/images/keytool生成证书.png))
 
    其实上诉创建证书的方法也可以使用下面一行命令达到，效果是相同的。各个参数的含义是：
 
