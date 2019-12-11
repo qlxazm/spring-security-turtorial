@@ -78,11 +78,11 @@ keytool是密码和证书的管理工具。它的位置位于\$JAVA_HOME\jre\bin
    keytool -export -alias test -file test.crt -keystore test.keystore
    ```
 
-   ![](E:\IDEAWorkSpace\security-learn\images\keytool导出公钥成公钥文件.png)
+   ![](https://github.com/qlxazm/spring-security-turtorial/blob/day5/images/keytool导出公钥成公钥文件.png)
 
 4. 将公钥文件导入到另外一个证书库中
 
-   ![](E:\IDEAWorkSpace\security-learn\images\keytool将公钥导入到另外一个证书库.png)
+   ![](https://github.com/qlxazm/spring-security-turtorial/blob/day5/images/keytool将公钥导入到另外一个证书库.png)
 
    ```shell
    keytool -import -keystore test2.keystore -file test.crt
@@ -100,13 +100,13 @@ keytool是密码和证书的管理工具。它的位置位于\$JAVA_HOME\jre\bin
 
    - 在导入公钥文件时可能出现错误“keytool error: java.lang.Exception: Input not an X.509 certificate”异常。这时可用文本编辑器打开公钥文件查看，如是乱码，则应该是“DER 编码二进制 X.509（.CER）(D)”证书，如是字母数字，则应该是"Base64 编码 X.509（.CER）(D)”证书。
 
-     这里以将“DER 编码二进制 X.509（.CER）(D)”证书转换成"Base64 编码 X.509（.CER）(D)”证书为例。![](E:\IDEAWorkSpace\security-learn\images\notAnX.509_step1.png)
+     这里以将“DER 编码二进制 X.509（.CER）(D)”证书转换成"Base64 编码 X.509（.CER）(D)”证书为例。![](https://github.com/qlxazm/spring-security-turtorial/blob/day5/images/notAnX.509_step1.png)
 
-     ![](E:\IDEAWorkSpace\security-learn\images\notAnX.509_step2.png)
+     ![](https://github.com/qlxazm/spring-security-turtorial/blob/day5/images/notAnX.509_step2.png)
 
-     ![](E:\IDEAWorkSpace\security-learn\images\notAnX.509_step3.png)
+     ![](https://github.com/qlxazm/spring-security-turtorial/blob/day5/images/notAnX.509_step3.png)
 
-     ![](E:\IDEAWorkSpace\security-learn\images\notAnX.509_step4.png)
+     ![](https://github.com/qlxazm/spring-security-turtorial/blob/day5/images/notAnX.509_step4.png)
 
 5. 查看证书文件信息
 
@@ -114,7 +114,7 @@ keytool是密码和证书的管理工具。它的位置位于\$JAVA_HOME\jre\bin
    keytool -printcert -file test.crt
    ```
 
-   ![](E:\IDEAWorkSpace\security-learn\images\keytool查看公钥文件的信息.png)
+   ![](https://github.com/qlxazm/spring-security-turtorial/blob/day5/images/keytool查看公钥文件的信息.png)
 
 6. 删除证书库中的条目
 
