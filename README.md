@@ -37,6 +37,8 @@ keytool是密码和证书的管理工具。它的位置位于\$JAVA_HOME\jre\bin
    keytool -genkeypair -alias test -keyalg RSA -keystore test.keystore
    ```
 
+   
+
    ![](E:\IDEAWorkSpace\security-learn\images\keytool生成证书.png)
 
    
