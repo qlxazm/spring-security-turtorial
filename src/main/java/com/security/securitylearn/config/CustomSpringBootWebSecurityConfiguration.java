@@ -3,6 +3,8 @@ package com.security.securitylearn.config;
 import com.security.securitylearn.common.JsonLoginPostProcessor;
 import com.security.securitylearn.common.LoginPostProcessor;
 import com.security.securitylearn.filter.PreLoginFilter;
+import com.security.securitylearn.security.CustomLogoutHandler;
+import com.security.securitylearn.security.CustomLogoutSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -67,9 +69,13 @@ public class CustomSpringBootWebSecurityConfiguration {
                     .and()
                     .addFilterBefore(preLoginFilter, UsernamePasswordAuthenticationFilter.class)
                     .formLogin()
-                    .loginProcessingUrl("/process")
+                    .loginProcessingUrl(LOGIN_PROCESS_URL)
                     .successForwardUrl("/login/success")
-                    .failureForwardUrl("/login/failure");
+                    .failureForwardUrl("/login/failure")
+                    .and()
+                    .logout()
+                    .addLogoutHandler(new CustomLogoutHandler())
+                    .logoutSuccessHandler(new CustomLogoutSuccessHandler());
         }
     }
 }

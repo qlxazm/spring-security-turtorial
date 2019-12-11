@@ -15,3 +15,9 @@ InMemoryUserDetailsManager实例实现了UserDetailsManager接口，UserDetailsM
 
 ## day3 自定义可支持多种登陆方式
 
+## day4 自定义退出逻辑
+
+通过实现LogoutHandler接口来自定义退出的逻辑。
+
+通过实现LogoutSuccessHandler接口来自定义退出成功的逻辑。
+

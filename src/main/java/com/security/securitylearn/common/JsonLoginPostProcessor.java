@@ -27,8 +27,10 @@ public class JsonLoginPostProcessor implements LoginPostProcessor {
     public String obtainUsername(ServletRequest request) {
         HttpServletRequestWrapper httpServletRequestWrapper = new HttpServletRequestWrapper((HttpServletRequest) request);
         String body = RequestUtils.obtainBody(httpServletRequestWrapper);
+
         JSONObject jsonObject = JSONUtil.parseObj(body);
         passwordThreadLocal.set(jsonObject.getStr(SPRING_SECURITY_FORM_PASSWORD_KEY));
+
         return jsonObject.getStr(SPRING_SECURITY_FORM_USERNAME_KEY);
     }
 
