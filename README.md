@@ -122,3 +122,6 @@ keytool是密码和证书的管理工具。它的位置位于\$JAVA_HOME\jre\bin
    keytool -delete -keystore test2.keystore -alias test2
    ```
 
+#### keytool加解密
+
+具体示例位于项目：src\main\java\com\security\securitylearn\keytool\RSAEntry.java下。
