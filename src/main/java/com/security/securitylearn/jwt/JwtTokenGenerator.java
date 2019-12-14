@@ -5,9 +5,11 @@ import cn.hutool.json.JSONUtil;
 import com.security.securitylearn.common.JwtPayloadBuilder;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.FileNotFoundException;
 import java.security.KeyPair;
 import java.security.interfaces.RSAPrivateKey;
 
+import org.springframework.security.authentication.event.AuthenticationFailureCredentialsExpiredEvent;
 import org.springframework.security.jwt.Jwt;
 import org.springframework.security.jwt.JwtHelper;
 import org.springframework.security.jwt.crypto.sign.RsaSigner;
@@ -85,6 +87,7 @@ public class JwtTokenGenerator {
 
         // 将生成的 token对 缓存下来
         jwtTokenStorage.put(tokenPair, aud);
+
         return tokenPair;
     }
 
@@ -93,7 +96,7 @@ public class JwtTokenGenerator {
      * @param token
      * @return
      */
-    public JSONObject decodeAndVerify(String token) {
+    public JSONObject decodeAndVerify(String token) throws JwtExpiredException{
         Assert.hasText(token, "token不能为空");
 
         // 获取公钥进行解密
@@ -105,8 +108,9 @@ public class JwtTokenGenerator {
         JSONObject jsonObject = JSONUtil.parseObj(claims);
 
         String exp = jsonObject.getStr(JWT_EXP_KEY);
+
         if (isExpired(exp)) {
-            throw new IllegalStateException("jwt已经过去啦");
+            throw new JwtExpiredException();
         }
         return jsonObject;
     }
