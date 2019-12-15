@@ -17,12 +17,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.prepost.PreFilter;
+import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -70,6 +74,12 @@ public class CustomSpringBootWebSecurityConfiguration {
         @Autowired
         private JwtAuthenticationFilter jwtAuthenticationFilter;
 
+        @Autowired
+        private FilterInvocationSecurityMetadataSource filterInvocationSecurityMetadataSource;
+
+        @Autowired
+        private AccessDecisionManager accessDecisionManager;
+
         @Override
         protected void configure(AuthenticationManagerBuilder auth) throws Exception {
             super.configure(auth);
@@ -91,10 +101,10 @@ public class CustomSpringBootWebSecurityConfiguration {
                     // 定义异常处理
                     .exceptionHandling().accessDeniedHandler(new SimpleAccessDeniedHandler()).authenticationEntryPoint(new SimpleAuthenticationEntryPoint())
                     .and()
-                    // 定义访问权限部分
+                    // 定义动态权限部分
                     .authorizeRequests()
-                    .antMatchers("/jwt/test").hasRole("ADMIN")
                     .anyRequest().authenticated()
+                    .withObjectPostProcessor(filterSecurityInterceptorObjectPostProcessor())
                     .and()
                     .addFilterBefore(preLoginFilter, UsernamePasswordAuthenticationFilter.class)
                     // 添加处理jwt的过滤器
@@ -107,6 +117,21 @@ public class CustomSpringBootWebSecurityConfiguration {
                     .logout()
                     .addLogoutHandler(new CustomLogoutHandler())
                     .logoutSuccessHandler(new CustomLogoutSuccessHandler(redis));
+        }
+
+        /**
+         * 自定义一个FilterSecurityInterceptor
+         * @return
+         */
+        private ObjectPostProcessor<FilterSecurityInterceptor> filterSecurityInterceptorObjectPostProcessor() {
+            return new ObjectPostProcessor<FilterSecurityInterceptor>() {
+                @Override
+                public <O extends FilterSecurityInterceptor> O postProcess(O o) {
+                    o.setAccessDecisionManager(accessDecisionManager);
+                    o.setSecurityMetadataSource(filterInvocationSecurityMetadataSource);
+                    return o;
+                }
+            };
         }
     }
 }
